@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>项目管理系统</title>
+
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="this is my page">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<link rel="stylesheet" type="text/css" href="./resources/cola-ui/semantic.css">
+	<link rel="stylesheet" type="text/css" href="./resources/cola-ui/cola.css">
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+	<script src="./resources/cola-ui/3rd.js"></script>
+	<script src="./resources/cola-ui/semantic.js"></script>
+	<script src="./resources/cola-ui/cola.js"></script>
+
+	<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<style type="text/css">
+		
+	</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="ui form">
+				<field class="required">
+					<label>用户名</label>
+					<c-input bind="userName"></c-input>
+				</field>
+				<field class="required">
+					<label>密码</label>
+					<c-input bind="passWord"></c-input>
+				</field>
+				<field>
+					<c-button class="basic" click="login">登录</c-button>
+					<c-button class="basic">注册</c-button>
+				</field>
+			</div>
+			
+		</div>
+
+		<script type="text/javascript">
+
+		 cola((model)=>{
+                model.set({
+                    userName:'',
+                    passWord:''
+                })
+
+                model.action({
+                    login:(self, arg)=>{
+                        let userName = model.get('userName')
+                        let passWord = model.get('passWord')
+                        if (userName) {
+                        	userName = userName.replace(/\s+/g, '')
+                        }
+
+                        if (passWord) {
+                        	passWord = passWord.replace(/\s+/g, '')
+                        }
+                       
+                        
+                        if (userName && passWord) {
+                        	$.ajax({
+	                            url: 'user/login',
+	                    //        dataType:'application/json',
+	                            type: 'POST',
+	                            data:{
+	                            	'userName':userName,
+	                            	'passWord':passWord,
+	                            },
+	                            success: (r)=>{
+	                                window.location.href += r
+	                            },
+	                            error: (data,request,textStatus,errorThrown)=>{
+	                                console.log(data)
+	                                console.log(request)
+	                                console.log(textStatus)
+	                                console.log(errorThrown)
+	                            },
+                       		})
+                        } else {
+                        	alert('用户名与密码不能为空！')
+                        }
+                        
+                    }
+                })
+            })
+
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>projecttime.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+    <link rel="stylesheet" type="text/css" href="./resources/cola-ui/semantic.css">
+    <link rel="stylesheet" type="text/css" href="./resources/cola-ui/cola.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="./resources/cola-ui/3rd.js"></script>
+    <script src="./resources/cola-ui/semantic.js"></script>
+    <script src="./resources/cola-ui/cola.js"></script>
+  </head>
+  
+  <body>
+    
+    <div class="v-box">
+      <div class="box">
+      <c-buttongroup>
+        <c-button class="primary" click="addItem">添加</c-button>
+        <c-button class="basic" click="modifyItem">修改</c-button>
+        <c-button class="secondary" click="deleteItem">删除</c-button>
+      </c-buttongroup>
+      </div>
+      <div class="flex-box">
+        <div id="appleTimes" style="margin-top: 5px;font-size: 7px;">
+          <template name="mananger">
+            <div class="h-box" style="width: 150px;float: right;">
+              <div c-widget="button;caption:修改;size:mini;" click="modify(item)"></div>
+              <div c-widget="button;caption:移除;class:red;size:mini;" click="remove(item)"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+    
+    <div id="addDialog" c-widget="Dialog;" style="width: 30%;">
+      <div class="header" style="text-align: center;">编辑可立项时间</div>
+        <div class="v-box">
+          <label style="margin-top: 10px;margin-left: 5px;">起始日期：<c-input c-widget="datePicker;placeholder:项目开始日期;bind:commitData.startTime;width:80%;"></c-input></label>
+          <label style="margin-top: 5px;margin-left: 5px;">截止日期：<c-input c-widget="datePicker;placeholder:项目结束日期;bind:commitData.endTime;width:80%;"></c-input></label>
+          <label style="margin-top: 5px;margin-left: 5px;margin-bottom: 10px;">连续几年：<c-input c-widget="placeholder:连续做几年;bind:commitData.continuousTime;width:80%;"></c-input></label>
+        </div>
+      <div class="actions" style="text-align: center;">
+        <div c-widget="button; caption:确定;click:ensure;class:blue"></div>
+      </div>
+    </div>
+    <div class="ui time-editor;"></div>
+    
+
+    <script type="text/javascript">
+      cola(function(model){
+        
+        model.set({
+          commitData:{
+            startTime:"",
+            endTime:"",
+            continuousTime:""
+          }
+        });
+        
+        model.describe("items",{
+            provider:{
+              url:"projectTime/all",
+              type:"GET",
+              success:function(self,arg){
+                alert('success')
+              },
+              error: (r)=>{
+                console.log(r)
+              }
+            }
+          });
+          
+        model.action({
+          addItem:function(){
+            cola.widget("addDialog").show();
+          },
+          ensure:function(){
+            requestData(model.get("commitData"),"/projectTime/add","add");
+          }
+        });
+        
+        function requestData(commitData,commitUrl,type) {
+        
+          $.ajax({
+            //提交数据的类型 POST GET
+            type: "PUT",
+            contentType: 'application/json;charset=UTF-8',
+            //提交的网址
+            url: commitUrl,
+            //提交的数据
+            data: JSON.stringify(commitData),
+            //返回数据的格式
+            datatype: "json", //"xml", "html", "script", "json", "jsonp", "text".
+            //在请求之前调用的函数
+            //beforeSend:function(){$("#msg").html("logining");},
+            //成功返回之后调用的函数             
+            success: function(data) {
+              if(type == "add"){
+                cola.widget("addDialog").hide();
+                model.set("items",data);
+              }
+            },
+            //调用执行后调用的函数
+            complete: function(XMLHttpRequest, textStatus) {
+              //      alert(XMLHttpRequest.responseText);
+              //      alert(textStatus);
+              //HideLoading();
+            },
+            //调用出错执行的函数
+            error: (r)=>{
+              //请求出错处理
+              console.log(r)
+            }
+          });
+      }
+        
+        model.widgetConfig({
+          appleTimes: {
+          $type:"table",
+          bind: "item in items",
+          showHeader: true,
+          highlightCurrentItem: true,
+          renderRow: function(self, arg) {
+            $(arg.dom).click(function() {
+              model.set("item", arg.item);
+            })
+          },
+          columns: [{
+            bind: "item.startTime",
+            align:"center",
+            caption: "起始日期"
+          }, {
+            bind: "item.endTime",
+            align:"center",
+            caption: "截止日期"
+          }, {
+            caption: "操作",
+            align: "center",
+            width:30,
+            template: "mananger"
+        }]
+        }
+      })
+    });
+      
+    </script>
+  </body>
+</html>

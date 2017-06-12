@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>projectteam.html</title>
+
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="./resources/cola-ui/semantic.css">
+    <link rel="stylesheet" type="text/css" href="./resources/cola-ui/cola.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="./resources/cola-ui/3rd.js"></script>
+    <script src="./resources/cola-ui/semantic.js"></script>
+    <script src="./resources/cola-ui/cola.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+</head>
+
+<body>
+<c-split-pane direction="left" position="40%">
+<!-- 左侧部分开始 -->
+<div class="pane">
+    <div c-widget="Pager; bind:project">
+        <a page-code="pages" class="item"></a>
+    </div>
+    <div id="pagingTableProject">
+        
+    </div>
+</div>
+<!-- 左侧部分结束 -->
+
+<!-- 右侧部分开始 -->
+<div class="pane">
+    <div style="height: 45px;">
+        <c-buttongroup>
+            <c-button class="green" click="addMember">添加</c-button>
+            <c-button class="red" click="deleteMember">删除</c-button>
+        </c-buttongroup>
+
+        <div c-widget="Pager; bind:task" style="float: right;">
+            <a page-code="pages" class="item"></a>
+        </div>
+    </div>
+        <div id="pagingTableTask" itemDoubleClick="updateMember">
+            
+        </div>
+    </div>
+<!-- 右侧部分结束 -->
+</c-split-pane>
+
+
+<c-dialog id="teamDetailFrame"  c-widget="width:50%;height:50">
+    <div class="header" style="text-align: center;height:45px">项目团队管理</div>
+
+    <div class="actions">
+        <c-button caption="取消" click="hide"></c-button>
+        <c-button caption="确认" click="submitTeam" class="primary"></c-button>
+    </div>
+
+    <div class="content">
+        <!-- method = "POST"  action = '' enctype="multipart/form-data"-->
+        角色
+        <input type="" name="teamrole">
+        姓名
+        <input type="" name="username">
+        手机号
+        <input type="" name="phone">
+    </div>
+
+
+</c-dialog>
+
+
+<script type="text/javascript">
+cola((model)=>{
+
+    model.describe('tasks',{
+        provider: {
+            mothod: 'GET',
+            url: 'projectTeam/member',
+            parameter: {
+                projectId: ''
+            }
+        }
+    })
+  
+    model.action({
+        //提交添加数据
+        submitTeam: (self, arg)=>{
+            $.ajax({
+                url:'projectTeam/member',
+                type:'PUT',
+                contentType: 'application/json;charset=UTF-8',
+                data:'',
+                datatype: "json",
+                success: (response)=>{
+                    model.get('members').insert(response)
+                },
+                error: (response)=>{
+                    console.log(response)
+                }
+            })
+        },
+
+        //增删改按钮触发事件
+        //增
+        addMember: (self, arg)=>{
+            cola.widget('teamDetailFrame').show()
+        },
+
+        //删
+        deleteMember: (self, arg)=>{
+            //do delete
+            $.ajax({
+                url:'misssionManager/task',
+                type:'DELETE',
+                contentType: 'application/json;charset=UTF-8',
+                data:'',
+                datatype: "json",
+                success: (response)=>{
+                    model.get('members').each((e)=>{
+                        if(e.get('selected')) {
+                            e.remove()
+                        }
+                    })
+                },
+                error: (response)=>{
+                    console.log(response)
+                }
+            })
+        },
+
+        //改
+        updateMember: (self, arg)=>{
+            model.set("commitData", arg.item.toJSON());
+            cola.widget('teamDetailFrame').show()
+        },
+
+        //-------------------------------------
+        //确认保存/取消操作
+        //确认
+        submitTeam: (self, arg)=>{
+        },
+
+        //取消
+        //hide
+    })
+
+    //左侧界面
+    model.widgetConfig({
+    pagingTableProject: {
+        $type: "table",
+        bind: "item in project",
+        showHeader: true,
+        currentPageOnly: true,
+        columns: [
+            {$type:"select"},
+            {bind: ".name",caption:"项目名称"},
+            {bind: ".projectDept",caption:"申报单位"},
+            ]
+        }
+    })
+
+    //右侧界面
+    model.widgetConfig({
+        pagingTableTask: {
+            $type: "table",
+            bind: "member in members",
+            showHeader: true,
+            currentPageOnly: true,
+            columns: [
+                {bind: "members.name",caption:"任务名称"},
+                {bind: "members.contetn",caption:"任务描述"},
+                {bind: "members.create",caption:"项目创建人"},
+                {bind: "members.startTime",caption:"计划开始时间"},
+                {bind: "members.endTime",caption:"要求完成时间"},
+                {bind: "members.projectDept",caption:"任务描述"},
+            ]
+        }
+    })
+})
+</script>
+</body>
+</html>

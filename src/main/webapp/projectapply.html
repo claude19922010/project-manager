@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>applyproject.html</title>
+
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="this is my page">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+	<link rel="stylesheet" type="text/css" href="./resources/cola-ui/semantic.css">
+	<link rel="stylesheet" type="text/css" href="./resources/cola-ui/cola.css">
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+	<script src="./resources/cola-ui/3rd.js"></script>
+	<script src="./resources/cola-ui/semantic.js"></script>
+	<script src="./resources/cola-ui/cola.js"></script>
+
+	<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	#projectDetailFrame{
+		line-height: 18px;
+	}
+	</style>
+</head>
+
+<body>
+<div class="app">
+	<nav>
+		<c-buttongroup>
+			<c-button class="primary" click="addData">添加</c-button>
+	<!--	<c-button class="basic" click="updateData">修改</c-button>	-->
+			<c-button class="secondary" click="deleteData">删除</c-button>
+		</c-buttongroup>
+	</nav>
+
+	<!-- project table start -->
+	<div c-widget="Pager; bind:project">
+		<a page-code="pages" class="item"></a>
+	</div>
+	
+	<c-table id="projectTable" itemDoubleClick="doubleClick" style="margin-top: 5px;font-size: 7px;">
+		
+	</c-table>
+
+</div>
+
+<c-dialog id="projectDetailFrame"  c-widget="width:95%;height:95%">
+	<div class="actions">
+		<c-button caption="取消" click="hide"></c-button>
+		<c-button caption="确认" click="submitProject" class="primary"></c-button>
+	</div>
+
+	<div class="content">
+		<form-layout>				
+			<fields class="cols-3">
+				<field>
+					<label>项目名称</label>
+					<c-input bind="projectData.name" c-widget="width:10%;"></c-input>
+				</field>
+				<field>
+					<label>交付时间</label>
+					<c-input c-widget="datePicker;bind:projectData.deliveryTime"></c-input>
+				</field>
+				<field>
+					<label>是否续建项目bool</label>
+					<c-radiogroup name="tagProject" value="" items="{{tagProject}}" bind='projectData.tagProject'></c-radiogroup>
+					<c-input bind='projectData.tagProject'></c-input>
+				</field>
+			</fields>
+			<fields class="cols-3">
+				<field class="cols-1">
+					<label>项目预算</label>
+					<c-input bind="projectData.budgetProject"></c-input>
+				</field>
+				<field class="cols-2">
+					<label>是否与总行应用相关int</label>
+					<c-radiogroup name="tagHeadBank" value="" items="{{tagHeadBank}}" bind='projectData.tagHeadBank'></c-radiogroup>
+					<c-input bind='projectData.tagHeadBank'></c-input>
+				</field>
+			</fields>
+			<fields>
+				<field>
+					<label>涉及的外部单位</label>
+					<c-input bind="projectData.externalParties"></c-input>
+				</field>
+			</fields>
+			<fields>
+				<field>
+					<label>需求提出部门</label>
+					<c-input bind="projectData.projectDept"></c-input>
+				</field>
+			</fields>
+			<fields>
+				<field>
+					<label>项目类型string</label>
+					<c-radiogroup name="projectType" value="" items="{{projectType}}" bind='projectData.projectType'></c-radiogroup>
+					<c-input bind='projectData.projectType'></c-input>
+				</field>
+			</fields>
+			<fields class="cols-3">
+				<field>
+					<label>申报方式string</label>
+					<c-radiogroup name="declareMeans" value="" items="{{declareMeans}}" bind='projectData.declareMeans'></c-radiogroup>
+					<c-input bind='projectData.declareMeans'></c-input>
+				</field>
+				<field>
+					<label>联系人</label>
+					<c-input bind="projectData.callUser"></c-input>
+				</field>
+				<field>
+					<label>联系方式</label>
+					<c-input bind="projectData.callUserPhone"></c-input>
+				</field>
+			</fields>
+			<fields>
+				<field>
+					<label>项目背景及必要性</label>
+					<c-textarea bind="projectData.projectBackground" maxlength="500" height="30" width="80%"></c-textarea>
+				</field>
+			</fields>
+			<fields>
+				<field>
+					<label>项目建设目标</label>
+					<c-textarea bind="projectData.projectTarget" maxlength="500" height="30" width="80%"></c-textarea>
+				</field>
+			</fields>
+			<fields>
+				<field>
+					<label>项目主要内容</label>
+					<c-textarea bind="projectData.projectContent" maxlength="500" height="30" width="80%"></c-textarea>
+				</field>
+			</fields>
+			<fields>
+				<field >
+					<form id="uploadFile">
+					<!-- method = "POST"  action = '' enctype="multipart/form-data"-->
+						<label>业务需求书</label>
+						<input type="file" name="file" bind="projectData.businessRequirementsId">
+						<input type="button" value="submit">
+						<c-input bind="projectData.businessRequirementsId"></c-input>
+					</form>
+				</field>
+			</fields>
+		</form-layout>
+	</div>
+
+	
+</c-dialog>
+</div>
+<script type="text/javascript" src="javascript/project_apply.js" async="true"></script>
+<script type="text/javascript">
+
+cola((model)=>{
+	model.action({
+		addData:(self, arg)=>{
+			cola.widget('projectDetailFrame').show()
+		},
+		updateData:(self, arg)=>{
+			cola.widget('projectDetailFrame').show()
+		},
+		deleteData:(self, arg)=>{},
+	})
+})
+
+$('#uploadFile input[type="button"]').on("click", ()=>{
+	var formData = new FormData($("#uploadFile")[0]);
+	$.ajax({
+		url:'file/upload',
+		type:'POST',
+		data:formData,
+		cache: false,
+		processData: false,
+		contentType: false,
+		success:(r)=>{
+			console.log(r)
+ 		},
+		error: (data,request,textStatus,errorThrown)=>{
+			console.log(data)
+			console.log(request)
+			console.log(textStatus)
+			console.log(errorThrown)
+		},
+	})
+})
+
+</script>
+</body>
+</html>

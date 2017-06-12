@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>项目管理系统</title>
+
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="this is my page">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+	<link rel="stylesheet" type="text/css" href="./resources/cola-ui/semantic.css">
+	<link rel="stylesheet" type="text/css" href="./resources/cola-ui/cola.css">
+<!-- 	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script> -->
+	<script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.js"></script>
+	<script src="./resources/cola-ui/3rd.js"></script>
+	<script src="./resources/cola-ui/semantic.js"></script>
+	<script src="./resources/cola-ui/cola.js"></script>
+
+	<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		ul, li {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: block;
+		}
+		field {
+			padding: 2px;
+			border: 1px solid red;
+		}		
+		.listTitle {
+
+		}
+		li {
+			line-height: 18px;
+			text-align: center;
+		}
+		nav div[data-href]
+	</style>
+</head>
+
+<body>
+<form-layout>
+	<fields>
+		<field class="listTitle">
+		
+			项目管理系统标题
+		
+		</field>
+	</fields>
+	<fields class="cols-10">
+		<field class="cols-1">
+			<nav>
+				<div>项目维护</div>
+				<div c-widget="button; click:chooseMenu">立项申请</div>
+				<div c-widget="button; click:chooseMenu">集中立项申报时间维护</div>
+				<div c-widget="button; click:chooseMenu">项目组维护</div>
+				<div c-widget="button; click:chooseMenu">任务管理</div>
+				<div c-widget="button; click:chooseMenu">我的任务</div>
+			</nav>
+			
+		</field>
+		<field class="cols-9">
+			<!-- <iframe src="projectapply.html">
+				
+			</iframe> -->
+			<c-iframe id="mainIFrame" height="700" path="./projectapply.html;" style="height: 99%;width: 100%;">
+			</c-iframe>
+		</field>
+	<fields>
+</form-layout>
+
+
+<script type="text/javascript">
+	cola((model)=>{
+		model.action({
+			chooseMenu: (self, arg)=>{
+				console.log(self, arg)
+				let title = self._caption
+
+				switch(title){
+					case '立项申请':
+					// todo
+						cola.widget("mainIFrame").getContentWindow().location.href = "projectapply.html";
+						break
+
+					case '集中立项申报时间维护':
+					//todo
+						cola.widget("mainIFrame").getContentWindow().location.href = "projecttime.html";
+						break
+
+					case '项目组维护':
+					// todo
+						cola.widget("mainIFrame").getContentWindow().location.href = "projectteam.html";
+						break
+
+					case '任务管理':
+					// todo
+						cola.widget("mainIFrame").getContentWindow().location.href = "missionmanage.html";
+						break
+
+					case '我的任务':
+					// todo
+						cola.widget("mainIFrame").getContentWindow().location.href = "mymission.html";
+						break
+
+				}
+				
+			}
+		})
+		})
+
+
+// var title = arg.item.get("data")._data.title;
+// 					if (title == "创建项目"){
+// 							
+// 						}else if (title == "项目组维护"){
+// 							cola.widget("mainIFrame").getContentWindow().location.href = "ProjectManager.html";
+// 						} else if (title == "立项时间维护"){
+// 							cola.widget("mainIFrame").getContentWindow().location.href = "AppleyTime.html";
+// 						}else if (title == "任务管理"){
+// 							cola.widget("mainIFrame").getContentWindow().location.href = "TaskManager.html";
+// 						}else if (title == "我的任务"){
+// 							cola.widget("mainIFrame").getContentWindow().location.href = "myTask.html";
+// 						}
+					
+// 					}
+</script>
+</body>
+</html>

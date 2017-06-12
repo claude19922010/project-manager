@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mymission.html</title>
+
+  <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+  <meta http-equiv="description" content="this is my page">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+  <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  <link rel="stylesheet" type="text/css" href="./resources/cola-ui/semantic.css">
+  <link rel="stylesheet" type="text/css" href="./resources/cola-ui/cola.css">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+  <script src="./resources/cola-ui/3rd.js"></script>
+  <script src="./resources/cola-ui/semantic.js"></script>
+  <script src="./resources/cola-ui/cola.js"></script>
+
+</head>
+
+<body>
+  <c-split-pane direction="left" position="40%">
+    <!-- 左侧部分开始 -->
+    <div class="pane">
+      <div c-widget="Pager; bind:project">
+       <a page-code="pages" class="item"></a>
+      </div>
+      <div id="pagingTableProject"></div>
+    </div>
+    <!-- 左侧部分结束 -->
+
+    <!-- 右侧部分开始 -->
+    <div class="pane">
+    <div style="height: 45px;">
+      <c-buttongroup>
+        <c-button class="primary" click="addData">添加</c-button>
+        <!--  <c-button class="basic" click="updateData">修改</c-button>  -->
+        <c-button class="secondary" click="deleteData">删除</c-button>
+      </c-buttongroup>
+
+      <div c-widget="Pager; bind:task" style="float: right;">
+       <a page-code="pages" class="item"></a>
+      </div>
+    </div>
+      <div id="pagingTableTask"></div>
+    </div>
+    <!-- 右侧部分结束 -->
+  </c-split-pane>
+  <script type="text/javascript">
+    cola((model)=>{
+
+      //左侧界面
+      model.widgetConfig({
+        pagingTableProject: {
+          $type: "table",
+          bind: "item in project",
+          showHeader: true,
+          currentPageOnly: true,
+          columns: [
+            {$type:"select"},
+            {bind: ".name",caption:"项目名称"},
+            {bind: ".projectDept",caption:"申报单位"},
+          ]
+        }
+      })
+
+      //右侧界面
+       model.widgetConfig({
+        pagingTableTask: {
+          $type: "table",
+          bind: "item in task",
+          showHeader: true,
+          currentPageOnly: true,
+          columns: [
+            {$type:"select"},
+            {bind: ".name",caption:"任务名称"},
+            {bind: ".projectDept",caption:"任务描述"},
+            {bind: ".projectDept",caption:"项目创建人"},
+            {bind: ".projectDept",caption:"计划开始时间"},
+            {bind: ".projectDept",caption:"要求完成时间"},
+            {bind: ".projectDept",caption:"任务描述"},
+            {bind: ".projectDept",caption:"项目创建人"},
+            {bind: ".projectDept",caption:"计划开始时间"},
+            {bind: ".projectDept",caption:"要求完成时间"},
+          ]
+        }
+      })
+    })
+  </script>
+</body>
+</html>
