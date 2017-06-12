@@ -77,7 +77,7 @@
 				</field>
 				<field class="cols-2">
 					<label>是否与总行应用相关int</label>
-					<c-radiogroup name="tagHeadBank" value="" items="{{tagHeadBank}}" bind='projectData.tagHeadBank'></c-radiogroup>
+					<c-radiogroup name="tagHeadBank" value="" bind='projectData.tagHeadBank' id="tagHeadBankValue"></c-radiogroup>
 					<c-input bind='projectData.tagHeadBank'></c-input>
 				</field>
 			</fields>
@@ -96,7 +96,7 @@
 			<fields>
 				<field>
 					<label>项目类型string</label>
-					<c-radiogroup name="projectType" value="" items="{{projectType}}" bind='projectData.projectType'></c-radiogroup>
+					<c-radiogroup name="projectType" value="" bind='projectData.projectType'></c-radiogroup>
 					<c-input bind='projectData.projectType'></c-input>
 				</field>
 			</fields>

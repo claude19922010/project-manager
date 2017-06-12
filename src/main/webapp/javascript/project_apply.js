@@ -82,14 +82,24 @@ cola((model)=>{
 		 		label:'否',
 		 		value:false
 		 	}]
-		}
+		},
+		tagHeadBankValue:{
+			$type:"RadioGroup",
+			items:[{
+				label:'是',
+		 		value:1
+		 	},{
+		 		label:'否',
+		 		value:0
+		 	}]
+		},
 	})
 
 	
 	model.set('declareMeans',['集中申报','非集中申报'])
 	model.set('projectType',['应用系统建设','信息化系统建设','网络建设'])
-	model.set('tagHeadBank',['是','否'])
-	model.set('tagProject',['是','否'])
+	// model.set('tagHeadBank',['是','否'])
+	// model.set('tagProject',['是','否'])
 
 	//确认并提交
 	model.action({
