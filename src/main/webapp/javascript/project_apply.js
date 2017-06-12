@@ -72,6 +72,19 @@ cola((model)=>{
 	model.set('projectData',{})
 
 	//绑定界面中单选框数据
+	model.widgetConfig({
+		tagProjectValue:{
+			$type:"RadioGroup",
+			items:[{
+				label:'是',
+		 		value:true
+		 	},{
+		 		label:'否',
+		 		value:false
+		 	}]
+		}
+	})
+
 	
 	model.set('declareMeans',['集中申报','非集中申报'])
 	model.set('projectType',['应用系统建设','信息化系统建设','网络建设'])
@@ -114,6 +127,6 @@ cola((model)=>{
 		}
 	})
 
-	
+
 })
 	
