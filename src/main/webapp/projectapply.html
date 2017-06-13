@@ -96,14 +96,14 @@
 			<fields>
 				<field>
 					<label>项目类型string</label>
-					<c-radiogroup name="projectType" value="" bind='projectData.projectType'></c-radiogroup>
+					<c-radiogroup name="projectType" value="" bind='projectData.projectType' id="projectTypeValue"></c-radiogroup>
 					<c-input bind='projectData.projectType'></c-input>
 				</field>
 			</fields>
 			<fields class="cols-3">
 				<field>
 					<label>申报方式string</label>
-					<c-radiogroup name="declareMeans" value="" items="{{declareMeans}}" bind='projectData.declareMeans'></c-radiogroup>
+					<c-radiogroup name="declareMeans" value="" bind='projectData.declareMeans' id="declareMeansValue"></c-radiogroup>
 					<c-input bind='projectData.declareMeans'></c-input>
 				</field>
 				<field>

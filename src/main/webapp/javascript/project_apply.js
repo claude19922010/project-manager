@@ -12,12 +12,15 @@ cola((model)=>{
 	//项目数据绑定至c-table
 	model.widgetConfig({
 	    projectTable: {
-	        $type: 'table',
-	        bind: 'project in projects',
-	        showHeader: true,
-	        currentPageOnly: true,
-	        columns: [
-				{$type:'select'},
+	    	$type:"table",
+			bind: "project in projects",
+			showHeader: true,
+			highlightCurrentItem: true,
+			renderRow: function(self, arg) {
+					$(arg.dom).click(function() {
+				})
+			},
+	        columns:[
 		        {bind: 'project.state',caption:'状态'},
 				{bind: 'project.name',caption:'项目名称'},
 				{bind: 'project.projectDept',caption:'申报单位'},
@@ -77,10 +80,10 @@ cola((model)=>{
 			$type:"RadioGroup",
 			items:[{
 				label:'是',
-		 		value:true
+		 		value:1
 		 	},{
 		 		label:'否',
-		 		value:false
+		 		value:0
 		 	}]
 		},
 		tagHeadBankValue:{
@@ -93,11 +96,34 @@ cola((model)=>{
 		 		value:0
 		 	}]
 		},
+		projectTypeValue:{
+			$type:"RadioGroup",
+			items:[{
+				label:'应用系统建设',
+		 		value:'应用系统建设'
+		 	},{
+		 		label:'信息化系统建设',
+		 		value:'信息化系统建设'
+		 	},{
+		 		label:'网络建设',
+		 		value:'网络建设'
+		 	}]
+		},
+		declareMeansValue:{
+			$type:"RadioGroup",
+			items:[{
+				label:'集中申报',
+		 		value:'集中申报'
+		 	},{
+		 		label:'非集中申报',
+		 		value:'非集中申报'
+		 	}]
+		},
 	})
 
 	
 	model.set('declareMeans',['集中申报','非集中申报'])
-	model.set('projectType',['应用系统建设','信息化系统建设','网络建设'])
+//	model.set('projectType',['应用系统建设','信息化系统建设','网络建设'])
 	// model.set('tagHeadBank',['是','否'])
 	// model.set('tagProject',['是','否'])
 
